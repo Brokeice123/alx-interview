@@ -11,22 +11,15 @@ def canUnlockAll(boxes):
     :param boxes: A list of lists representing the boxes
     :return: True if all boxes can be opened, else return False
     """
-    if not boxes:
-        return False
-
-    # Start with the first box unlocked
-    unlocked_boxes = [0]
-    boxes_to_check = [box for box in boxes if box]
-
-    while boxes_to_check:
-        current_box = boxes_to_check.pop(0)
-        current_keys = current_box
-        for key in current_keys:
-            if key < len(boxes) and key not in unlocked_boxes:
-                unlocked_boxes.append(key)
-                boxes_to_check.append(boxes[key])
-
-    return len(unlocked_boxes) == len(boxes)
-
-if __name__ == "__main__:
-    canUnlockAll(boxes)
+    keys = [0]
+    """ list keys initialized with the first box (box 0) as unlocked.
+    Keys stores indices of unlocked and accessible boxes """
+    for key in keys:
+        """ For each key, it accesses the corresponding box in boxes """
+        for boxKey in boxes[key]:
+            if boxKey not in keys and boxKey < len(boxes):
+                keys.append(boxKey)
+    if len(keys) == len(boxes):
+        """checking is numbe of keys equals number of boxes """
+        return True
+    return False
