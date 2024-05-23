@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """
 Defines a function that determines if a byte string
 is valid UTF-8
