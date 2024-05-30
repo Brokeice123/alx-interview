@@ -1,72 +1,60 @@
 #!/usr/bin/python3
-""" N queens puzzle module placing N non-attacking
-queens on an N×N chessboard """
+"""
+N queens puzzle module
+"""
 
 import sys
 
 
-def column_validity(board, row, col):
-    """Check if it's safe to place a queen at position (row, col) on the board
-    Args:
-        board (list): current state of the chessboard
-        row (int): row index to check
-        col (int): column index to check
-    Returns:
-        bool:  True if it's safe to place a queen at the
-                given position, False otherwise."""
-    for i in range(row):
-        if board[i] == col:
-            return False
-
-        if abs(i - row) == abs(board[i] - col):
-            return False
-    return True
+def solve(row, column):
+    solver = [[]]
+    for q in range(row):
+        solver = place_queen(q, column, solver)
+    return solver
 
 
-def solve_n_queens(n, board, row, solutions):
-    """Recursively solve the N Queens problem
-    Args:
-        n (int): The size of the chessboard (N)
-        board (list): The current state of the chessboard
-        row (int): The current row being examined
-        solutions (list): A list to store all found solutions """
-    if row == n:
-        solutions.append([[i, board[i]] for i in range(n)])
-        return
-    for col in range(n):
-        if column_validity(board, row, col):
-            board[row] = col
-            solve_n_queens(n, board, row + 1, solutions)
-            board[row] = -1
+def place_queen(q, column, prev_solver):
+    solver_queen = []
+    for array in prev_solver:
+        for x in range(column):
+            if is_safe(q, x, array):
+                solver_queen.append(array + [x])
+    return solver_queen
 
 
-def main():
-    """Main function to solve the N Queens problem"""
+def is_safe(q, x, array):
+    if x in array:
+        return (False)
+    else:
+        return all(abs(array[column] - x) != q - column
+                   for column in range(q))
 
+
+def init():
     if len(sys.argv) != 2:
-        # Check if the user gives 2 arguments
-        print("Total arguments should be 2", file=sys.stderr)
+        print("Usage: nqueens N")
         sys.exit(1)
-    try:
-        # Check if the secon argumnet is a number
-        n = int(sys.argv[1])
-    except ValueError:
-        print("N must be a number", file=sys.stderr)
+    if sys.argv[1].isdigit():
+        the_queen = int(sys.argv[1])
+    else:
+        print("N must be a number")
         sys.exit(1)
-    if n < 4:
-        # Check if 4 is the lowest number given
-        print("N should be at least 4", file=sys.stderr)
+    if the_queen < 4:
+        print("N must be at least 4")
         sys.exit(1)
-    if not 1 <= n <= 32:
-        # N must be between 1 and 32. This takes care of overflows
-        print("N must be between 1 and 32", file=sys.stderr)
-        sys.exit(1)
-    board = [-1] * n
-    solutions = []
-    solve_n_queens(n, board, 0, solutions)
-    for solution in solutions:
-        print(solution)
+    return(the_queen)
 
 
-if __name__ == "__main__":
-    main()
+def n_queens():
+
+    the_queen = init()
+    solver = solve(the_queen, the_queen)
+    for array in solver:
+        clean = []
+        for q, x in enumerate(array):
+            clean.append([q, x])
+        print(clean)
+
+
+if __name__ == '__main__':
+    n_queens()
