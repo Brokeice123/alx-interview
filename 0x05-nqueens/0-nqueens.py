@@ -1,4 +1,3 @@
-
 #!/usr/bin/python3
 """ N queens puzzle module placing N non-attacking
 queens on an N×N chessboard """
