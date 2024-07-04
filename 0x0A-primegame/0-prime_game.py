@@ -7,7 +7,7 @@ Prime game
 def isWinner(x, nums):
     def sieve(n):
         """ Generate list of primes up to n using the Sieve of
-        Eratosthenes 
+        Eratosthenes
         """
         is_prime = [True] * (n + 1)
         p = 2
@@ -19,7 +19,7 @@ def isWinner(x, nums):
         return [p for p in range(2, n + 1) if is_prime[p]]
 
     def play_game(n):
-        """ Simulate the game and return the winner 
+        """ Simulate the game and return the winner
         (True if Maria wins, False if Ben wins)
         """
         primes = sieve(n)
