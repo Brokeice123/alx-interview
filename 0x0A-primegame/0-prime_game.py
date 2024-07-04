@@ -4,48 +4,49 @@ Prime game
 """
 
 
-def isWinner(x, nums):
-    def sieve(n):
-        """ Generate list of primes up to n using the Sieve of
-        Eratosthenes
-        """
-        is_prime = [True] * (n + 1)
-        p = 2
-        while (p * p <= n):
-            if is_prime[p] == True:
-                for i in range(p * p, n + 1, p):
-                    is_prime[i] = False
-            p += 1
-        return [p for p in range(2, n + 1) if is_prime[p]]
+def is_prime(n):
+    """function Checking if a number is prime
+    Args:
+        n (int): upper boundary of range. lower boundary is always 1
+    """
 
-    def play_game(n):
-        """ Simulate the game and return the winner
-        (True if Maria wins, False if Ben wins)
-        """
-        primes = sieve(n)
-        primes_set = set(primes)
-        turn = 0  # 0 for Maria, 1 for Ben
-        while primes_set:
-            # Current player picks the smallest prime number
-            current_prime = min(primes_set)
-            # Remove current_prime and its multiples
-            primes_set -= {i for i in range(
-                current_prime, n + 1, current_prime)
-                }
-            turn = 1 - turn  # Switch turns
-        return turn == 1  # Maria wins if turn is 1 (meaning Ben had no moves)
+    primeNums = []
+
+    # List to track if each number is prime or not
+    filtered = [True] * (n + 1)
+    # Loop over numbers from 2 to n
+    for prime in range(2, n + 1):
+        if (filtered[prime]):
+            primeNums.append(prime)
+
+            # Mark all multiples of the current prime as not prime
+            for i in range(prime, n + 1, prime):
+                filtered[i] = False
+    return primeNums
+
+
+def isWinner(x, nums):
+    """Determines the winner of each round
+    Args:
+        x (num) = The number of rounds
+        nums (list)= array of n for each round
+    Returns:
+        str: name of player that won the most rounds or None"""
+
+    if x is None or nums is None or x == 0 or nums == []:
+        return None
 
     maria_wins = 0
     ben_wins = 0
 
-    for num in nums:
-        if num == 1:
-            ben_wins += 1  # Ben wins automatically if num is 1
+    for i in range(x):
+        primeNums = is_prime(nums[i])
+
+        # Determine the winner of the round based on count of prime numbers
+        if len(primeNums) % 2 == 0:
+            ben_wins += 1
         else:
-            if play_game(num):
-                maria_wins += 1
-            else:
-                ben_wins += 1
+            maria_wins += 1
 
     if maria_wins > ben_wins:
         return "Maria"
